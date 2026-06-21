@@ -1,0 +1,347 @@
+{
+  "catalog": {
+    "name": "Boma Mabati Factory Ltd - Product Catalog",
+    "version": "1.0",
+    "last_updated": "2026-06-20",
+    "location": "Mombasa Road, Nairobi, Kenya",
+    "contact": {
+      "whatsapp": "wa.me/254724171111",
+      "phone": "+254 724 171 111"
+    },
+    "payment": {
+      "primary": "M-Pesa",
+      "alternatives": ["Bank Transfer"]
+    },
+    "delivery": {
+      "area": "Nairobi and surrounding areas",
+      "notes": "Delivery charges calculated based on location and order size"
+    }
+  },
+
+  "categories": [
+    {
+      "id": "corrugated",
+      "name": "Corrugated Sheets",
+      "description": "Standard corrugated roofing sheets — affordable, durable, and widely used for residential and commercial roofing.",
+      "icon": "📋",
+      "base_price_note": "Prices vary by gauge (thickness). Thinner = lighter & cheaper; thicker = stronger & longer-lasting.",
+      "products": [
+        {
+          "id": "corrugated-30g",
+          "name": "Corrugated Sheet (30 Gauge)",
+          "description": "Lightweight corrugated sheet suitable for temporary structures, sheds, and budget-friendly roofing.",
+          "unit": "sheet",
+          "standard_size": "2.5m × 0.85m",
+          "base_price_kes": 650,
+          "gauge": 30,
+          "gauge_mm": 0.30,
+          "features": [
+            "Budget-friendly option",
+            "Lightweight — easy to transport and install",
+            "Galvanized anti-corrosion coating"
+          ],
+            "recommended_uses": ["Sheds", "Temporary structures", "Low-budget housing", "Animal shelters"]
+        },
+        {
+          "id": "corrugated-28g",
+          "name": "Corrugated Sheet (28 Gauge)",
+          "description": "Standard residential corrugated sheet balancing affordability with durability.",
+          "unit": "sheet",
+          "standard_size": "2.5m × 0.85m",
+          "base_price_kes": 750,
+          "gauge": 28,
+          "gauge_mm": 0.35,
+          "features": [
+            "Most popular gauge for residential use",
+            "Good balance of cost and durability",
+            "Galvanized anti-corrosion coating"
+          ],
+          "recommended_uses": ["Residential houses", "Schools", "Churches"]
+        },
+        {
+          "id": "corrugated-26g",
+          "name": "Corrugated Sheet (26 Gauge)",
+          "description": "Heavy-duty corrugated sheet for permanent structures requiring maximum durability.",
+          "unit": "sheet",
+          "standard_size": "2.5m × 0.85m",
+          "base_price_kes": 950,
+          "gauge": 26,
+          "gauge_mm": 0.45,
+          "features": [
+            "Heavy-duty construction",
+            "Superior wind and hail resistance",
+            "Longer lifespan — ideal for permanent structures"
+          ],
+          "recommended_uses": ["Permanent residential", "Commercial buildings", "High-wind areas"]
+        }
+      ]
+    },
+
+    {
+      "id": "ibr",
+      "name": "IBR / Box Profile Sheets",
+      "description": "Premium IBR (Inverted Box Rib) profile sheets — stronger, more rigid, and more aesthetically pleasing than standard corrugated. The #1 recommendation for quality-conscious builders.",
+      "icon": "🏗️",
+      "base_price_note": "IBR sheets offer superior load-bearing capacity and a modern profile finish. Well worth the upgrade from corrugated.",
+      "upsell_from": "corrugated",
+      "upsell_message": "Upgrade from corrugated to IBR for just KES {price_diff} extra per sheet — get stronger, better-looking roofing that lasts longer.",
+      "products": [
+        {
+          "id": "ibr-28g",
+          "name": "IBR Profile Sheet (28 Gauge)",
+          "description": "Premium IBR sheet with a box-rib profile — offers greater strength and rigidity than standard corrugated at a competitive price.",
+          "unit": "sheet",
+          "standard_size": "3.0m × 0.85m",
+          "base_price_kes": 1050,
+          "gauge": 28,
+          "gauge_mm": 0.35,
+          "features": [
+            "Box-rib profile for extra rigidity",
+            "Modern aesthetic appearance",
+            "Better water runoff than corrugated",
+            "Galvanized with color coating options"
+          ],
+          "color_options": ["Red", "Green", "Blue", "Brown", "Grey", "Black"],
+          "color_surcharge_kes": 150,
+          "recommended_uses": ["Modern homes", "Commercial buildings", "Perimeter walls", "Roofing upgrades"]
+        },
+        {
+          "id": "ibr-26g",
+          "name": "IBR Profile Sheet (26 Gauge)",
+          "description": "Heavy-gauge IBR profile sheet for premium commercial and high-end residential projects.",
+          "unit": "sheet",
+          "standard_size": "3.0m × 0.85m",
+          "base_price_kes": 1350,
+          "gauge": 26,
+          "gauge_mm": 0.45,
+          "features": [
+            "Maximum strength and rigidity",
+            "Premium finish for high-end projects",
+            "Excellent load-bearing capacity",
+            "Color coating available"
+          ],
+          "color_options": ["Red", "Green", "Blue", "Brown", "Grey", "Black"],
+          "color_surcharge_kes": 150,
+          "recommended_uses": ["High-end residential", "Commercial complexes", "Industrial buildings"]
+        }
+      ]
+    },
+
+    {
+      "id": "structural-steel",
+      "name": "Structural Steel",
+      "description": "Steel support structures for roofing — purlins, trusses, and accessories. Essential for a strong, durable roof frame.",
+      "icon": "🔩",
+      "products": [
+        {
+          "id": "purlin-c100",
+          "name": "C-Purlin 100mm",
+          "description": "Light-duty C-channel purlin for smaller roof spans and light roofing materials.",
+          "unit": "piece",
+          "standard_length": "6.0m",
+          "base_price_kes": 850,
+          "features": [
+            "Galvanized C-channel",
+            "Pre-punched holes for easy installation",
+            "Suitable for small to medium roof spans"
+          ],
+          "recommended_uses": ["Residential roofs", "Small spans up to 4m"]
+        },
+        {
+          "id": "purlin-c125",
+          "name": "C-Purlin 125mm",
+          "description": "Medium-duty C-channel purlin for standard residential and light commercial roof spans.",
+          "unit": "piece",
+          "standard_length": "6.0m",
+          "base_price_kes": 1100,
+          "features": [
+            "Heavier gauge C-channel",
+            "Pre-punched holes",
+            "Suitable for medium roof spans"
+          ],
+          "recommended_uses": ["Standard residential", "Small commercial", "Spans up to 5m"]
+        },
+        {
+          "id": "purlin-c150",
+          "name": "C-Purlin 150mm",
+          "description": "Heavy-duty C-channel purlin for large roof spans and commercial/industrial applications.",
+          "unit": "piece",
+          "standard_length": "6.0m",
+          "base_price_kes": 1450,
+          "features": [
+            "Heavy-duty construction",
+            "Maximum load-bearing capacity",
+            "Ideal for large span roofs"
+          ],
+          "recommended_uses": ["Commercial buildings", "Industrial warehouses", "Spans up to 7m"]
+        },
+        {
+          "id": "truss-light",
+          "name": "Light-Duty Roof Truss",
+          "description": "Pre-fabricated light-duty roof truss for small residential structures.",
+          "unit": "piece",
+          "base_price_kes": 2500,
+          "features": [
+            "Pre-fabricated and ready to install",
+            "Galvanized steel construction",
+            "Designed for standard roof pitches"
+          ],
+          "recommended_uses": ["Small houses", "Single-pitch roofs"]
+        },
+        {
+          "id": "truss-standard",
+          "name": "Standard Roof Truss",
+          "description": "Pre-fabricated standard roof truss for residential buildings. Suitable for 6m–8m spans.",
+          "unit": "piece",
+          "base_price_kes": 4500,
+          "features": [
+            "Pre-fabricated steel truss",
+            "Designed for 6m–8m spans",
+            "Standard 25° roof pitch"
+          ],
+          "recommended_uses": ["Standard residential houses", "Spans 6m–8m"]
+        }
+      ]
+    },
+
+    {
+      "id": "accessories",
+      "name": "Roofing Accessories",
+      "description": "Essential roofing accessories — fasteners, flashings, ridges, and sealants to complete your roofing project.",
+      "icon": "🔧",
+      "products": [
+        {
+          "id": "ridge-cap",
+          "name": "Ridge Cap (Corrugated)",
+          "description": "Galvanized ridge cap for corrugated roofing sheets.",
+          "unit": "piece",
+          "standard_length": "2.0m",
+          "base_price_kes": 450,
+          "features": ["Matching profile", "Galvanized finish"]
+        },
+        {
+          "id": "ridge-cap-ibr",
+          "name": "Ridge Cap (IBR Profile)",
+          "description": "Galvanized ridge cap for IBR profile roofing sheets.",
+          "unit": "piece",
+          "standard_length": "2.0m",
+          "base_price_kes": 550,
+          "features": ["Matches IBR profile", "Galvanized finish"]
+        },
+        {
+          "id": "roofing-nails",
+          "name": "Roofing Nails (1kg pack)",
+          "description": "Galvanized roofing nails with rubber washers for secure sheet fastening.",
+          "unit": "pack",
+          "pack_size": "1 kg",
+          "base_price_kes": 350,
+          "features": ["Galvanized", "Rubber washer included", "Corrosion resistant"]
+        },
+        {
+          "id": "self-drill-screws",
+          "name": "Self-Drilling Roofing Screws (100-pack)",
+          "description": "Self-drilling screws with EPDM washers for IBR and structural steel attachment.",
+          "unit": "pack",
+          "pack_size": "100 pieces",
+          "base_price_kes": 450,
+          "features": ["Self-drilling tip", "EPDM weather seal", "Corrosion resistant"]
+        },
+        {
+          "id": "flashings",
+          "name": "Flashing (Galvanized)",
+          "description": "Galvanized flashing for roof edges, valleys, and wall junctions.",
+          "unit": "piece",
+          "standard_length": "2.0m",
+          "base_price_kes": 380,
+          "features": ["Flexible bending", "Galvanized finish"]
+        }
+      ]
+    }
+  ],
+
+  "upsell_paths": [
+    {
+      "from": "corrugated-30g",
+      "to": "corrugated-28g",
+      "price_difference_kes": 100,
+      "message": "For just KES 100 more per sheet, upgrade to 28-gauge — the standard for Kenyan homes. Stronger and longer-lasting."
+    },
+    {
+      "from": "corrugated-30g",
+      "to": "corrugated-26g",
+      "price_difference_kes": 300,
+      "message": "For just KES 300 more per sheet, go heavy-duty 26-gauge — built to last a lifetime."
+    },
+    {
+      "from": "corrugated-28g",
+      "to": "corrugated-26g",
+      "price_difference_kes": 200,
+      "message": "For just KES 200 more per sheet, upgrade to 26-gauge for maximum durability."
+    },
+    {
+      "from": "corrugated-28g",
+      "to": "ibr-28g",
+      "price_difference_kes": 300,
+      "message": "Upgrade from standard corrugated to IBR profile for just KES 300 more per sheet — stronger, better looking, and longer lasting."
+    },
+    {
+      "from": "corrugated-26g",
+      "to": "ibr-26g",
+      "price_difference_kes": 400,
+      "message": "For just KES 400 more per sheet, get the premium IBR 26-gauge — the ultimate roofing solution."
+    },
+    {
+      "from": "ibr-28g",
+      "to": "ibr-26g",
+      "price_difference_kes": 300,
+      "message": "For just KES 300 more per sheet, go for heavy-gauge IBR — maximum strength and premium finish."
+    }
+  ],
+
+  "bundles": [
+    {
+      "id": "bundle-starter",
+      "name": "Starter Roof Pack",
+      "description": "Everything needed for a basic corrugated roof installation.",
+      "items": [
+        {"product_id": "corrugated-28g", "quantity": 20, "label": "Corrugated Sheets (28g)"},
+        {"product_id": "ridge-cap", "quantity": 2, "label": "Ridge Caps"},
+        {"product_id": "roofing-nails", "quantity": 2, "label": "Roofing Nails"}
+      ],
+      "discount_percentage": 5,
+      "message": "Save 5% with the Starter Roof Pack — your complete corrugated roofing bundle."
+    },
+    {
+      "id": "bundle-premium",
+      "name": "IBR Premium Roof Pack",
+      "description": "Complete IBR roof kit with all accessories for a professional finish.",
+      "items": [
+        {"product_id": "ibr-28g", "quantity": 20, "label": "IBR Profile Sheets (28g)"},
+        {"product_id": "ridge-cap-ibr", "quantity": 2, "label": "IBR Ridge Caps"},
+        {"product_id": "self-drill-screws", "quantity": 3, "label": "Self-Drilling Screws"}
+      ],
+      "discount_percentage": 7,
+      "message": "Save 7% with the IBR Premium Roof Pack — the complete premium roofing solution."
+    }
+  ],
+
+  "order_flow": {
+    "steps": [
+      {"step": 1, "action": "Greet & Qualify", "description": "AI agent greets the customer and asks about project type, size, and location."},
+      {"step": 2, "action": "Product Selection", "description": "Guide customer through product categories and recommend based on their needs."},
+      {"step": 3, "action": "Instant Quote", "description": "Generate price estimate with itemized breakdown."},
+      {"step": 4, "action": "Upsell Offer", "description": "Suggest upgrade options (e.g. corrugated → IBR) or bundle deals."},
+      {"step": 5, "action": "Payment", "description": "Send M-Pesa payment link or provide bank transfer details."},
+      {"step": 6, "action": "Delivery Booking", "description": "Confirm delivery date and location within Nairobi area."},
+      {"step": 7, "action": "Follow-up", "description": "48-hour abandoned cart recovery message if no payment received."}
+    ]
+  },
+
+  "ai_agent_context": {
+    "greeting_message": "Hello! Welcome to Boma Mabati Factory Ltd 👋\n\nI'm your sales assistant. I can help you with:\n• Instant price quotes on roofing materials\n• Product recommendations for your project\n• Order placement with M-Pesa payment\n• Delivery booking (Nairobi area)\n\nTo get started, could you tell me:\n1. What type of project is this? (Home, commercial, shed, etc.)\n2. What roofing material are you looking for? (Corrugated sheets, IBR profile, or structural steel?)\n3. What quantity do you need?\n4. Where is the delivery location?",
+    "abandoned_cart_message": "Hello! 👋\n\nYou recently requested a quote from Boma Mabati Factory Ltd but didn't complete your order. Is there anything I can help with?\n\n• Questions about the products?\n• Need a revised quote?\n• Ready to place your order now?\n\nJust reply and I'll be happy to assist! 😊",
+    "payment_confirmation_message": "Thank you for your order! ✅\n\nYour M-Pesa payment link has been sent.\n\nHere's a summary:\n{order_summary}\n\nOnce payment is confirmed, we'll arrange delivery within 1-3 business days.\n\nNeed to change anything? Just let me know!",
+    "delivery_confirmation_message": "Your delivery is booked! 📦\n\nDelivery Date: {delivery_date}\nLocation: {delivery_location}\n\nOur team will call you at {phone_number} on the morning of delivery to confirm the exact time.\n\nThank you for choosing Boma Mabati Factory Ltd!",
+    "social_proof": "⭐ Rated 4.3 out of 5 by 95 buyers near you"
+  }
+}

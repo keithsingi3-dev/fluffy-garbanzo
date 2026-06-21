@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boma Mabati Chat Widget</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ===== CHAT WIDGET STYLES ===== */
+    :root {
+      --bg: #1a1a1a;
+      --bg-light: #222;
+      --bg-lighter: #2a2a2a;
+      --accent: #D85A30;
+      --accent-hover: #e06a40;
+      --text: #e8e6e0;
+      --text-muted: #999;
+      --text-dim: #666;
+      --bubble-user: #D85A30;
+      --bubble-bot: #2a2a2a;
+      --border: rgba(255,255,255,0.06);
+      --shadow: 0 12px 48px rgba(0,0,0,0.5);
+      --radius: 12px;
+      --radius-lg: 16px;
+    }
+
+    /* ===== WIDGET CONTAINER ===== */
+    .boma-chat * { box-sizing: border-box; margin: 0; padding: 0; }
+    .boma-chat {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== LAUNCH BUTTON ===== */
+    .boma-chat .chat-launch {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 24px rgba(216, 90, 48, 0.4);
+      transition: all 0.3s ease;
+      z-index: 2147483647;
+    }
+    .boma-chat .chat-launch:hover {
+      transform: scale(1.08);
+      box-shadow: 0 8px 32px rgba(216, 90, 48, 0.5);
+    }
+    .boma-chat .chat-launch:active {
+      transform: scale(0.95);
+    }
+    .boma-chat .chat-launch .close-icon { display: none; }
+    .boma-chat .chat-launch.open .bubble-icon { display: none; }
+    .boma-chat .chat-launch.open .close-icon { display: block; }
+    .boma-chat .chat-launch .badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #ff4444;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ===== CHAT PANEL ===== */
+    .boma-chat .chat-panel {
+      position: fixed;
+      bottom: 96px;
+      right: 24px;
+      width: 380px;
+      height: 580px;
+      max-height: calc(100vh - 140px);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      display: none;
+      flex-direction: column;
+      z-index: 2147483646;
+      overflow: hidden;
+      animation: slideUp 0.3s ease;
+    }
+    .boma-chat .chat-panel.open { display: flex; }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ===== HEADER ===== */
+    .boma-chat .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, var(--bg-light), #1e1e1e);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .boma-chat .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .boma-chat .chat-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .boma-chat .chat-header h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .boma-chat .chat-header .status {
+      font-size: 0.75rem;
+      color: #25D366;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .boma-chat .chat-header .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #25D366;
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .boma-chat .chat-header-close {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 22px;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .boma-chat .chat-header-close:hover { color: #fff; }
+
+    /* ===== MESSAGES ===== */
+    .boma-chat .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      scroll-behavior: smooth;
+    }
+    .boma-chat .chat-messages::-webkit-scrollbar {
+      width: 4px;
+    }
+    .boma-chat .chat-messages::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .boma-chat .chat-messages::-webkit-scrollbar-thumb {
+      background: var(--text-dim);
+      border-radius: 4px;
+    }
+
+    .boma-chat .message {
+      display: flex;
+      flex-direction: column;
+      max-width: 85%;
+      animation: msgIn 0.25s ease;
+    }
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .boma-chat .message.user {
+      align-self: flex-end;
+    }
+    .boma-chat .message.bot {
+      align-self: flex-start;
+    }
+
+    .boma-chat .message-bubble {
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      word-wrap: break-word;
+    }
+    .boma-chat .message.user .message-bubble {
+      background: var(--bubble-user);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .boma-chat .message.bot .message-bubble {
+      background: var(--bubble-bot);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+    .boma-chat .message-time {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+      padding: 0 4px;
+    }
+    .boma-chat .message.user .message-time {
+      text-align: right;
+    }
+    .boma-chat .message.bot .message-time {
+      text-align: left;
+    }
+
+    /* ===== TYPING INDICATOR ===== */
+    .boma-chat .typing {
+      display: none;
+      align-self: flex-start;
+      padding: 12px 16px;
+      background: var(--bubble-bot);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      border-bottom-left-radius: 4px;
+      gap: 4px;
+    }
+    .boma-chat .typing.show { display: flex; }
+    .boma-chat .typing span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-dim);
+      animation: typingBounce 1.4s infinite;
+    }
+    .boma-chat .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .boma-chat .typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); background: var(--text-dim); }
+      30% { transform: translateY(-6px); background: var(--accent); }
+    }
+
+    /* ===== QUICK REPLY BUTTONS ===== */
+    .boma-chat .quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .boma-chat .quick-reply-btn {
+      background: transparent;
+      border: 1px solid rgba(216, 90, 48, 0.35);
+      color: var(--accent);
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .boma-chat .quick-reply-btn:hover {
+      background: rgba(216, 90, 48, 0.12);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+    .boma-chat .quick-reply-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* ===== INPUT AREA ===== */
+    .boma-chat .chat-input-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-light);
+      flex-shrink: 0;
+    }
+    .boma-chat .chat-input-area input {
+      flex: 1;
+      background: var(--bg-lighter);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 10px 16px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .boma-chat .chat-input-area input::placeholder {
+      color: var(--text-dim);
+    }
+    .boma-chat .chat-input-area input:focus {
+      border-color: var(--accent);
+    }
+    .boma-chat .chat-input-area .send-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .boma-chat .chat-input-area .send-btn:hover {
+      background: var(--accent-hover);
+      transform: scale(1.05);
+    }
+    .boma-chat .chat-input-area .send-btn:active {
+      transform: scale(0.93);
+    }
+    .boma-chat .chat-input-area .send-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 480px) {
+      .boma-chat .chat-panel {
+        right: 12px;
+        left: 12px;
+        bottom: 88px;
+        width: auto;
+        height: calc(100vh - 120px);
+        max-height: none;
+      }
+      .boma-chat .chat-launch {
+        bottom: 16px;
+        right: 16px;
+      }
+    }
+
+    /* ===== DEMO MODE OVERRIDES ===== */
+    .boma-chat .demo-badge {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      background: rgba(255,255,255,0.04);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== CHAT WIDGET HTML ===== -->
+<div class="boma-chat" id="bomaChatWidget">
+  <!-- Launch Button -->
+  <button class="chat-launch" id="chatLaunchBtn" aria-label="Open chat">
+    <span class="bubble-icon">💬</span>
+    <span class="close-icon">✕</span>
+  </button>
+
+  <!-- Chat Panel -->
+  <div class="chat-panel" id="chatPanel">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar">BM</div>
+        <div>
+          <h3>Boma Mabati</h3>
+          <span class="status"><span class="status-dot"></span> Online</span>
+        </div>
+      </div>
+      <button class="chat-header-close" id="chatCloseBtn" aria-label="Close chat">✕</button>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-messages" id="chatMessages">
+      <!-- Bot welcome message is injected by JS -->
+    </div>
+
+    <!-- Typing Indicator -->
+    <div class="typing" id="typingIndicator">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <!-- Quick Replies (shown after welcome) -->
+    <div style="padding: 0 16px 6px;" id="quickReplyContainer">
+      <div class="quick-replies" id="quickReplies">
+        <button class="quick-reply-btn" data-action="quote">Get a Quote</button>
+        <button class="quick-reply-btn" data-action="products">View Products</button>
+        <button class="quick-reply-btn" data-action="sales">Talk to Sales</button>
+        <button class="quick-reply-btn" data-action="delivery">Delivery Info</button>
+      </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Type your message..." autocomplete="off">
+      <button class="send-btn" id="sendBtn" aria-label="Send message">➤</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ===== CONFIGURATION =====
+  // Set API_ENDPOINT to a real URL to connect to the AI agent backend.
+  // When null, the widget runs in demo mode with built-in simulated responses.
+  const CONFIG = {
+    API_ENDPOINT: null,  // e.g. 'https://api.bomamabati.co.ke/chat'
+    USE_DEMO: true,       // Falls back to demo if API_ENDPOINT is null
+    WELCOME_DELAY: 600,   // ms before welcome message
+    TYPING_DELAY: 800,    // ms to show typing indicator before response
+    BRAND: {
+      name: 'Boma Mabati',
+      phone: '+254 724 171 111',
+      whatsapp: 'wa.me/254724171111',
+      address: 'Mombasa Road, Nairobi, Kenya',
+      socialProof: '⭐ Rated 4.3 by 95 buyers near you'
+    }
+  };
+
+  // ===== DOM REFS =====
+  const launchBtn = document.getElementById('chatLaunchBtn');
+  const closeBtn = document.getElementById('chatCloseBtn');
+  const panel = document.getElementById('chatPanel');
+  const messagesEl = document.getElementById('chatMessages');
+  const inputEl = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const typingEl = document.getElementById('typingIndicator');
+  const quickRepliesEl = document.getElementById('quickReplies');
+
+  let isOpen = false;
+  let messageCount = 0;
+
+  // ===== DEMO KNOWLEDGE BASE =====
+  const demoKnowledge = {
+    products: [
+      { name: 'Corrugated Sheets', price: 'KES 650/sheet (28g)', desc: 'Light industrial roofing, weather-resistant, easy to install.' },
+      { name: 'IBR / Box Profile', price: 'Premium finish', desc: 'Modern trapezoidal profile with superior strength. Ideal for warehouses and contemporary homes.' },
+      { name: 'Structural Steel', price: 'Custom lengths', desc: 'Purlins, trusses, angles, and roofing accessories. Galvanised options available.' }
+    ],
+    responses: {
+      greeting: "Hello! 👋 Welcome to **Boma Mabati Factory Ltd** — Nairobi's factory-direct roofing supplier.\n\nI can help you with instant quotes, product info, and delivery bookings. What would you like to know?",
+      quote: "Sure! I'd be happy to give you an instant quote. 🏗️\n\nCould you tell me:\n1. Which product are you interested in? (Corrugated, IBR, or Structural Steel)\n2. What quantity do you need?\n3. Where is the delivery location?",
+      products: "Here are our main products:\n\n🏗️ **Corrugated Sheets** — From KES 650/sheet (28g)\n   Light industrial roofing, weather-resistant.\n\n🔷 **IBR / Box Profile** — Premium finish\n   Modern trapezoidal sheets, superior strength.\n\n⚙️ **Structural Steel** — Custom lengths\n   Purlins, trusses, angles, and accessories.\n\nWhich one interests you?",
+      sales: "You can talk to our sales team directly:\n📞 Call: **+254 724 171 111**\n💬 WhatsApp: **[Chat with us](https://wa.me/254724171111)**\n\nOr I can help you right here — just let me know what you need!",
+      delivery: "🚚 **Free delivery** within Nairobi & 20 km of Mombasa Road.\n\n📱 Pay via **M-Pesa** — fast, secure, no cash.\n\n🏭 **Factory-direct pricing** — no middlemen.\n\nStandard delivery: 1–3 business days after payment confirmation.",
+      fallback: "I'm not sure I understand. You can try:\n• **\"Get a Quote\"** — for pricing\n• **\"View Products\"** — to see our range\n• **\"Talk to Sales\"** — to speak with a person\n• **\"Delivery Info\"** — for delivery details"
+    }
+  };
+
+  // ===== HELPERS =====
+  function formatTime() {
+    const d = new Date();
+    return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
+  }
+
+  function scrollToBottom() {
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function addMessage(text, type) {
+    const div = document.createElement('div');
+    div.className = 'message ' + type;
+    div.innerHTML = '<div class="message-bubble">' + text + '</div><div class="message-time">' + formatTime() + '</div>';
+    messagesEl.appendChild(div);
+    messageCount++;
+    scrollToBottom();
+    return div;
+  }
+
+  function showTyping() {
+    typingEl.classList.add('show');
+    scrollToBottom();
+  }
+
+  function hideTyping() {
+    typingEl.classList.remove('show');
+  }
+
+  function addQuickReplies() {
+    quickRepliesEl.parentElement.style.display = 'block';
+  }
+
+  function hideQuickReplies() {
+    quickRepliesEl.parentElement.style.display = 'none';
+  }
+
+  // ===== DEMO RESPONSE GENERATOR =====
+  function getDemoResponse(input) {
+    const text = input.toLowerCase().trim();
+
+    if (text === '' || text.includes('hello') || text.includes('hi') || text.includes('hey') || text.includes('help')) {
+      return demoKnowledge.responses.greeting;
+    }
+    if (text.includes('quote') || text.includes('price') || text.includes('cost') || text.includes('how much')) {
+      return demoKnowledge.responses.quote;
+    }
+    if (text.includes('product') || text.includes('what do you have') || text.includes('catalog') || text.includes('range')) {
+      return demoKnowledge.responses.products;
+    }
+    if (text.includes('sales') || text.includes('person') || text.includes('human') || text.includes('agent') || text.includes('speak')) {
+      return demoKnowledge.responses.sales;
+    }
+    if (text.includes('delivery') || text.includes('shipping') || text.includes('transport') || text.includes('mpesa') || text.includes('payment')) {
+      return demoKnowledge.responses.delivery;
+    }
+    if (text.includes('corrugated') || text.includes('iron sheet')) {
+      return "**Corrugated Sheets** 🏗️\n\nFrom KES 650/sheet (28g). Also available in 26g and 30g.\n• Standard size: 2.5m × 0.85m\n• Colors: Red, Blue, Green, Stone Coated\n• Ideal for: Residential homes, sheds, commercial buildings\n\nWant a quote? Just tell me the quantity and delivery location!";
+    }
+    if (text.includes('ibr') || text.includes('box profile') || text.includes('trapezoidal')) {
+      return "**IBR / Box Profile Sheets** 🔷\n\nPremium trapezoidal profile with superior strength.\n• Available in 28g and 26g\n• Colors: Red, Blue, Green, Stone Coated, Silver\n• Ideal for: Warehouses, factories, modern homes, showrooms\n\nWant a quote? Just tell me the quantity and delivery location!";
+    }
+    if (text.includes('steel') || text.includes('purlin') || text.includes('truss') || text.includes('structural')) {
+      return "**Structural Steel** ⚙️\n\n• Purlins & Trusses — custom lengths\n• Angles & Channels — galvanised or painted\n• Accessories — roofing nails, screws, ridge caps, flashings\n\nAll cut to your specs. Tell me what you need and I'll quote it!";
+    }
+
+    return demoKnowledge.responses.fallback;
+  }
+
+  // ===== SEND MESSAGE (API or Demo) =====
+  function sendMessage(text) {
+    if (!text || text.trim() === '') return;
+
+    const userText = text.trim();
+    inputEl.value = '';
+
+    // Hide quick replies
+    hideQuickReplies();
+
+    // Add user message
+    addMessage(escapeHTML(userText), 'user');
+
+    // Show typing
+    showTyping();
+
+    // Disable send during response
+    sendBtn.disabled = true;
+    inputEl.disabled = true;
+
+    if (CONFIG.API_ENDPOINT && !CONFIG.USE_DEMO) {
+      // Real API mode
+      fetch(CONFIG.API_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userText, session: 'web-chat' })
+      })
+      .then(r => r.json())
+      .then(data => {
+        hideTyping();
+        const reply = data.reply || data.text || data.message || 'Sorry, I didn\'t get a response.';
+        addMessage(reply, 'bot');
+        addQuickReplies();
+      })
+      .catch(err => {
+        hideTyping();
+        addMessage('Sorry, I\'m having trouble connecting. Please try again or call **+254 724 171 111**.', 'bot');
+        addQuickReplies();
+      })
+      .finally(() => {
+        sendBtn.disabled = false;
+        inputEl.disabled = false;
+        inputEl.focus();
+      });
+    } else {
+      // Demo mode
+      setTimeout(() => {
+        hideTyping();
+        const reply = getDemoResponse(userText);
+        addMessage(reply, 'bot');
+        addQuickReplies();
+        sendBtn.disabled = false;
+        inputEl.disabled = false;
+        inputEl.focus();
+      }, CONFIG.TYPING_DELAY + Math.random() * 400);
+    }
+  }
+
+  // Simple HTML escaping
+  function escapeHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // ===== WELCOME MESSAGE =====
+  function showWelcome() {
+    setTimeout(() => {
+      showTyping();
+      setTimeout(() => {
+        hideTyping();
+        addMessage(demoKnowledge.responses.greeting, 'bot');
+        addQuickReplies();
+      }, CONFIG.TYPING_DELAY);
+    }, CONFIG.WELCOME_DELAY);
+  }
+
+  // ===== TOGGLE PANEL =====
+  function openPanel() {
+    isOpen = true;
+    panel.classList.add('open');
+    launchBtn.classList.add('open');
+    inputEl.focus();
+    scrollToBottom();
+  }
+
+  function closePanel() {
+    isOpen = false;
+    panel.classList.remove('open');
+    launchBtn.classList.remove('open');
+  }
+
+  function togglePanel() {
+    if (isOpen) {
+      closePanel();
+    } else {
+      openPanel();
+    }
+  }
+
+  // ===== EVENT LISTENERS =====
+  launchBtn.addEventListener('click', togglePanel);
+  closeBtn.addEventListener('click', closePanel);
+
+  sendBtn.addEventListener('click', function() {
+    sendMessage(inputEl.value);
+  });
+
+  inputEl.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendMessage(inputEl.value);
+    }
+  });
+
+  // Quick reply buttons
+  quickRepliesEl.addEventListener('click', function(e) {
+    const btn = e.target.closest('.quick-reply-btn');
+    if (!btn) return;
+    const action = btn.dataset.action;
+    const labels = {
+      quote: 'I\'d like to get a quote',
+      products: 'What products do you have?',
+      sales: 'I want to talk to sales',
+      delivery: 'Tell me about delivery'
+    };
+    sendMessage(labels[action] || btn.textContent);
+  });
+
+  // Click outside to close
+  document.addEventListener('click', function(e) {
+    if (!isOpen) return;
+    const widget = document.getElementById('bomaChatWidget');
+    if (widget && !widget.contains(e.target)) {
+      closePanel();
+    }
+  });
+
+  // ===== INIT =====
+  showWelcome();
+
+})();
+</script>
+</body>
+</html>
